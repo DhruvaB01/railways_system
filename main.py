@@ -670,17 +670,32 @@ class Ticketscreen:
             lab_date = Label (frames, text = self.date_entry, bg = 'lavender', fg = 'black', font = ('Seoge UI',15)).place (x= 360, y =7)
             lab_train_t= Label(frames, text = tme[0], bg = 'lavender', fg = 'black', font = ('Seoge UI',15)).place (x= 510, y =7)
 
-            def book_pg(name):
 
-                bookpg = Toplevel(bg='white')
-                Labe = Label(bookpg, text=name, bg='white', fg='black').place(x=100, y=100)
-
-
-            select_train_butt = Button(frames, text = 'select', bg = 'purple3', fg = 'white', font = ('seoge UI', 13),command=lambda:book_pg(self.train_lst[fra]))
+            select_train_butt = Button(frames, text = 'select', bg = 'purple3', fg = 'white', font = ('seoge UI', 13),command=lambda fra = fra :self.book_pg(fra))
             select_train_butt.place (x= 800, y= 5)
 
-            if fra == self.train_lst.index('Mum-Pune-Hydrebad super'):
-                break
+
+
+    def book_pg(self,name):
+
+        booktic = Toplevel(bg = 'white')
+        booktic_frame1 = Frame(booktic,bg = 'red3')
+        booktic_frame1.place (x = 0 , y = 0 , height = 75 , width = 2000)
+        train_nme_lab= Label (booktic, text = self.train_lst[name] , bg = 'white', fg = 'black', font = ('Impact', 32)).place (x = 740 , y = 130)
+
+        sql_query_lab_time = 'SELECT Time_travel FROM Available_trains WHERE Train_name = %s'
+        sql_run_t = (str(self.train_lst[name]),)
+        my_cursor.execute(sql_query_lab_time, sql_run_t)
+        tme = 0
+        for tme in my_cursor:
+            pass
+
+        lab_date = Label(booktic, text='Date of departure: '+ self.date_entry, bg='white', fg='black', font=('Impact', 20)).place(x=30,y=210)
+        train_tme_lab = Label(booktic, text='Time of departure : '+ str(tme[0]), bg='white', fg='black', font=('Impact', 20)).place(x=30, y=270)
+
+
+
+
 
 
 
@@ -689,12 +704,6 @@ class Ticketscreen:
     def back_tic_page (self):
         self.chktrains.destroy()
         objLogin.objmainscreen.page1.deiconify()
-
-
-
-
-
-
 
 
 

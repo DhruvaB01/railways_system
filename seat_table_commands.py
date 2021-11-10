@@ -1,7 +1,13 @@
 
 import mysql.connector
 
-railwayconn = mysql.connector.connect(host = 'localhost' , user = 'root' , passwd = 'rudu101519' , database = 'railway')
+railwayconn = mysql.connector.connect(
+    host = '127.0.0.1',
+    user = 'root',
+    password = 'dhruvab',
+    database = 'rms'
+    )
+
 cursor = railwayconn.cursor()
 
 seattable  = 'seat_table'
@@ -43,7 +49,6 @@ railwayconn.commit()
 
 # cursor.execute(f'select * from {seattable}')
 # print(cursor.fetchall())
-
 
 
 railwayconn.close()
