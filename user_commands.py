@@ -23,10 +23,62 @@ class User_Actions() :
             'phoneno' : 0,
             'gender' : None,
             'address' : None,
-            'booked seats' : []
+            'booked seats' : self.get_booked_seats()
             
         }
-        self.get_data()
+
+    def display_portal(self):
+        print('-'*10 + 'USER PORTAL' + '-'*10 + '''
+1 - BOOK TICKETS
+2 - CANCEL TICKETS
+3 - DISPLAY 
+0 - EXIT
+'''+ '-'*31 )
+
+        self.action = int(input('ENTER OPTION --> '))
+        
+
+    def sign_in(self,login_passwd):
+        if not self.check_password(login_passwd):
+            print('RETRY')
+            # ADD ERROR DIALOG BOX
+
+        else :
+            print('SIGNED IN !')
+            self.get_data()
+
+
+            while True :
+                self.display_portal()
+
+                if self.action == 1 : 
+                    # TO THE BOOKING PAGE
+                    print('BOOKING PAGE')
+                    self.book_tickets()
+
+                if self.action == 2 :
+                    # TO THE CANCELLATION PAGE
+                    print('CANCELLATION PAGE')
+                    self.cancel_tickets()
+                    
+
+                if self.action == 3 :
+                    # DISPLAY INFO
+                    # print(self.get_data())
+                    print('-' * 11 + 'USER DATA' + '-'*11)
+                    for k in self.userdata :
+                        print(f'{k} = {self.userdata[k]}')
+                    print('-' * 31)
+                    
+
+                if self.action == 0 :
+                    # EXIT TO LOGIN PORTAL
+                    break
+
+                else :
+                    print('INCORRECT OPTION !')
+
+
 
     def check_password(self,login_passwd):
         cursor.execute(f'select password from {usertable} where username = "{self.username}"',)
@@ -56,25 +108,29 @@ class User_Actions() :
         print(output)
         if not output == []:
             output = output[0]
+        
+
+
+            # parseing data into a dictionary
+            self.userdata['firstname'] = output[0]
+            self.userdata['lastname'] = output[1]
+            self.userdata['username'] = output[2]
+            self.userdata['email'] = output[3]
+            self.userdata['phoneno'] = output[4]
+            self.userdata['gender'] = output[5]
+            self.userdata['address'] = output[6]
+            # self.userdata['password'] = output[7]
+
+            # print(self.userdata)
+            return self.userdata
+
         else :
             print('NO RECORD FOUND !')
 
-
-        # parseing data into a dictionary
-        self.userdata['firstname'] = output[0]
-        self.userdata['lastname'] = output[1]
-        self.userdata['username'] = output[2]
-        self.userdata['email'] = output[3]
-        self.userdata['phoneno'] = output[4]
-        self.userdata['gender'] = output[5]
-        self.userdata['address'] = output[6]
-        # self.userdata['password'] = output[7]
-
-        # print(self.userdata)
-        return self.userdata
-
     def sign_up(self):
         
+        #ADD CODE TO EXTRACT DATA FROM FRONTEND
+
         userdata_dict = {
         'firstname' : 'testname',
         'lastname' : 'testlastname',
@@ -98,6 +154,9 @@ class User_Actions() :
             print('Success')
         except mysql.connector.errors.IntegrityError as exc:
             # print(str(exc))
+
+            # MODIFY THESE TO PROMPT A ERROR DIALOG BOX
+
             if re.search(r'email',str(exc)) : print('EMAIL ALREADY EXIST')
             if re.search(r'phone_no',str(exc)) : print('PHONE NUMBER ALREADY EXIST')
             if re.search(r'PRIMARY',str(exc)) : print('USERNAME ALREADY EXIST')
@@ -130,11 +189,13 @@ class User_Actions() :
                 # seat = output[i][0]
                 query = f'''update {seattable} set username = "{self.userdata['username']}" where seat_no = {seat}'''
                 cursor.execute(query)
-                print(f"BOOKED {seat} for {self.username}")
+                print(f"BOOKED {seat} FOR {self.username}")
                 
                 # self.userdata['booked seats'].append(seat)
 
             railwayconn.commit()
+
+        self.userdata['booked seats'] = self.get_booked_seats()
             
             # print('TICKETS BOOKED --> ',self.userdata['booked seats'])
 
@@ -157,12 +218,8 @@ class User_Actions() :
             print('ALL TICKETS CANCELLED !')
 
         else :
-            query = f"select seat_no,username from seat_table where username = '{self.username}';"
-            print(query)
-            cursor.execute(query)
-            output = cursor.fetchall()
 
-            bookedseats = {seatno for seatno , _  in output}
+            bookedseats = self.get_booked_seats()
             print("BOOKED SEATS = ",bookedseats)
 
             cancelseats = set(map(int,input(f'Enter seats to cancel from {bookedseats} -->').rstrip().split()))      
@@ -171,12 +228,20 @@ class User_Actions() :
             for seat in cancelseats.intersection(bookedseats) :
                 query = f'update seat_table set username = null where seat_no = {seat}; '
                 cursor.execute(query)
-                print(f"CANCELLED {seat} for {self.username}")
+                print(f"CANCELLED {seat} FOR {self.username}")
 
             railwayconn.commit()
 
+        self.userdata['booked seats'] = self.get_booked_seats()
+        
 
+    def get_booked_seats(self):
+        query = f"select seat_no,username from seat_table where username = '{self.username}';"
+        # print(query)
+        cursor.execute(query)
+        output =  cursor.fetchall()
 
+        return {seatno for seatno , _  in output}
 
 if __name__ == "__main__" :
 
@@ -217,22 +282,24 @@ if __name__ == "__main__" :
     passwd = '444'
 
 
-    username = username2
-    passwd = passwd2
+    username = username1
+    passwd = '444'
 
-    ua = User_Actions(username)
+    ua = User_Actions('GGIHT')
+
+    ua.sign_in(passwd)
     # ua.sign_up()
     # query = 'select * from user_table where username'
     # cursor.execute()
 
-    if not ua.check_password(passwd) : 
-        print('RETRY')
-        del ua
-    else :
+    # if not ua.check_password(passwd) : 
+    #     print('RETRY')
+    #     del ua
+    # else :
     
     # ua = User_Actions(username)
         # print(ua.get_data())
-        ua.book_tickets()
+        # ua.book_tickets()
         # ua.cancel_tickets()
     # ua.book_tickets()
 
