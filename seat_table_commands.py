@@ -36,7 +36,6 @@ for i in range(1,total_seats+1) :
     data.append((i,seattype))
 
 # print(data)
-
 # checking the contents of table
 
 # cursor.execute(f'select * from {seattable}')

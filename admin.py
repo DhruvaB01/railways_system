@@ -5,6 +5,7 @@ from tkcalendar import *
 
 import mysql.connector
 
+
 mydb = mysql.connector .connect (
     host = '127.0.0.1',
     user = 'root',
@@ -89,8 +90,36 @@ class Mainpage:
         self.train_name_entry = Entry(self.admin, bg='white', fg='Black', width=25, font=('seoge UI', 16))
         self.train_name_entry.place(x=187, y=373)
 
+        time_2_label = Label(self.admin, text = 'time 2:', bg = 'white', fg = 'black', font = ('seoge UI', 14)).place(x= 68, y = 420)
+        self.time_2_entry= Entry (self.admin, bg = 'white', fg = 'black',font=('seoge UI', 16))
+        self.time_2_entry.place(x= 187, y = 423)
+
+
         button_enter = Button(self.admin, text='enter', bg='blue', fg='white', font=('seoge UI', 14),command=self.enter)
-        button_enter.place(x=280, y=460)
+        button_enter.place(x=800, y=500)
+
+
+
+
+        Economy_class_lab = Label(self.admin, text='Economy class: ', bg='white', fg='black',font=('Seoge UI', 14)).place(x=1000, y=110)
+        self.Economy_class = Entry(self.admin, bg='white', fg='Black', width=25, font=('seoge UI', 16))
+        self.Economy_class.place(x=1180, y = 110)
+
+        AC_first_lab = Label(self.admin, text='AC 1st tire: ', bg='white', fg='black',font=('Seoge UI', 14)).place(x=1000, y=160)
+        self.AC_first = Entry(self.admin, bg='white', fg='Black', width=25, font=('seoge UI', 16))
+        self.AC_first.place(x=1180, y = 160)
+
+        First_class_seats_lab = Label(self.admin, text='First class: ', bg='white', fg='black',font=('Seoge UI', 14)).place(x=1000, y=210)
+        self.First_class = Entry(self.admin, bg='white', fg='Black', width=25, font=('seoge UI', 16))
+        self.First_class.place(x=1180, y=210)
+
+        AC_two_lab = Label(self.admin, text = 'AC 2 tier', bg = 'white', fg='black',font=('Seoge UI', 14)).place(x=1000, y=260)
+        self.AC_two = Entry(self.admin, bg='white', fg='Black', width=25, font=('seoge UI', 16))
+        self.AC_two.place(x=1180, y=260)
+
+
+
+
 
     def from_show(self):
         self.from_entry.delete(0, END)
@@ -125,6 +154,9 @@ class Mainpage:
 
     def enter (self):
 
+        self.data_seat = []
+        self.data_seattype=[]
+
         if self.select_train_entry.get()=='D':
 
             if self.from_entry.get() == 'select city' or self.to_entry.get() == 'select city' or self.to_entry.get()== '' or self.from_entry.get() == '':
@@ -139,6 +171,110 @@ class Mainpage:
                 my_cursor.execute(sql_query_avail_1,query_input_1)
                 mydb.commit()
 
+                if self.Economy_class.get() != 0 :
+                    for x in range(1, self.Economy_class.get() + 1):
+                        m = 'EC' + str(x)
+                        self.data_seat.append(str(m),)
+
+                    for i in range(1, self.Economy_class.get() + 1):
+                        if i % self.Economy_class.get() == 1:
+                            seattype = 'LB'
+                        elif i % self.Economy_class.get() == 2:
+                            seattype = 'MB'
+                        elif i % self.Economy_class.get() == 3:
+                            seattype = 'UB'
+                        elif i % self.Economy_class.get() == 4:
+                            seattype = 'LB'
+                        elif i % self.Economy_class.get() == 5:
+                            seattype = 'MB'
+                        elif i % self.Economy_class.get() == 6:
+                            seattype = 'UB'
+                        elif i % self.Economy_class.get() == 7:
+                            seattype = 'LB'
+                        elif i % self.Economy_class.get() == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(),self.train_name_entry.get(), self.data_seat[i - 1], seattype, self.date_entry.get()))
+
+                if self.AC_first.get() != 0:
+                    for x in range(1, self.AC_first.get() + 1):
+                        x = 'A' + str(x)
+                        self.data_seat.append(str(x), )
+
+                    for i in range(1, self.AC_first.get() + 1):
+                        if i % self.AC_first.get() == 1:
+                            seattype = 'LB'
+                        elif i % self.AC_first.get() == 2:
+                            seattype = 'MB'
+                        elif i % self.AC_first.get() == 3:
+                            seattype = 'UB'
+                        elif i % self.AC_first.get() == 4:
+                            seattype = 'LB'
+                        elif i % self.AC_first.get() == 5:
+                            seattype = 'MB'
+                        elif i % self.AC_first.get() == 6:
+                            seattype = 'UB'
+                        elif i % self.AC_first.get() == 7:
+                            seattype = 'LB'
+                        elif i % self.AC_first.get() == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
+                if self.AC_two.get() != 0:
+                    for x in range(1, self.AC_two.get() + 1):
+                        x = 'AA' + str(x)
+                        self.data_seat.append(str(x), )
+
+                    for i in range(1, self.AC_two.get() + 1):
+                        if i % self.AC_two.get() == 1:
+                            seattype = 'LB'
+                        elif i % self.AC_two.get() == 2:
+                            seattype = 'MB'
+                        elif i % self.AC_two.get() == 3:
+                            seattype = 'UB'
+                        elif i % self.AC_two.get() == 4:
+                            seattype = 'LB'
+                        elif i % self.AC_two.get() == 5:
+                            seattype = 'MB'
+                        elif i % self.AC_two.get() == 6:
+                            seattype = 'UB'
+                        elif i % self.AC_two.get() == 7:
+                            seattype = 'LB'
+                        elif i % self.AC_two.get() == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
+
+                if self.First_class.get() != 0:
+                    for x in range(1, self.First_class.get()+ 1):
+                        x = 'F' + str(x)
+                        self.data_seat.append(str(x), )
+
+                    for i in range(1, self.First_class.get() + 1):
+                        if i % self.First_class.get() == 1:
+                            seattype = 'LB'
+                        elif i % self.First_class.get() == 2:
+                            seattype = 'MB'
+                        elif i % self.First_class.get() == 3:
+                            seattype = 'UB'
+                        elif i % self.First_class.get()== 4:
+                            seattype = 'LB'
+                        elif i % self.First_class.get()== 5:
+                            seattype = 'MB'
+                        elif i % self.First_class.get() == 6:
+                            seattype = 'UB'
+                        elif i % self.First_class.get() == 7:
+                            seattype = 'LB'
+                        elif i % self.First_class.get() == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
+
+                sql_insert_b1 = "INSERT INTO Bookings (Train_type, Train_name , Seat,Seat_type,Date_travel) VALUES (%s,%s,%s,%s,%s)"
+                my_cursor.executemany(sql_insert_b1, self.data_seattype)
+                mydb.commit()
+
+
+
         elif self.select_train_entry.get()== 'I':
 
             if self.from_entry.get() == 'select city' or self.to_entry.get() == 'select city' or self.via_entry.get()== 'select city':
@@ -148,17 +284,10 @@ class Mainpage:
                 messagebox.showerror('No train name', 'Please enter name of train')
 
             else:
-                sql_query_avail_2 = 'INSERT INTO Available_trains (Train_name , From_city,via_city, To_city, Date_travel, Time_travel) VALUES (%s,%s,%s,%s,%s,%s)'
-                query_input_2 = (self.train_name_entry.get(),self.from_entry.get(),self.via_entry.get(), self.to_entry.get(), self.date_entry.get(), self.time_entry.get())
+                sql_query_avail_2 = 'INSERT INTO Available_trains (Train_name , From_city,via_city, To_city, Date_travel, Time_travel, Time_2) VALUES (%s,%s,%s,%s,%s,%s,%s)'
+                query_input_2 = (self.train_name_entry.get(),self.from_entry.get(),self.via_entry.get(), self.to_entry.get(), self.date_entry.get(), self.time_entry.get(), self.time_2_entry.get())
                 my_cursor.execute(sql_query_avail_2,query_input_2)
                 mydb.commit()
-
-
-
-
-
-
-
 
 
 
