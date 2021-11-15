@@ -1,8 +1,9 @@
 import mysql.connector
 
 railwayconn = mysql.connector.connect(
-    host="localhost", user="root", passwd="rudu101519", database="railway"
+    host="127.0.0.1", user="root", password="dhruvab", database="rms"
 )
+
 cursor = railwayconn.cursor()
 
 seattable = "seat_table"
@@ -31,7 +32,6 @@ for i in range(1, total_seats + 1):
     data.append((i, seattype))
 
 # print(data)
-
 # checking the contents of table
 
 # cursor.execute(f'select * from {seattable}')
