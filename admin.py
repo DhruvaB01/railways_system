@@ -154,8 +154,11 @@ class Mainpage:
 
     def enter (self):
 
-        self.data_seat = []
         self.data_seattype=[]
+        eco_seat = int(self.Economy_class.get())
+        acfirst_seat = int(self.AC_first.get())
+        acsecond_seat = int(self.AC_two.get())
+        first_class_seat= int(self.First_class.get())
 
         if self.select_train_entry.get()=='D':
 
@@ -171,107 +174,100 @@ class Mainpage:
                 my_cursor.execute(sql_query_avail_1,query_input_1)
                 mydb.commit()
 
-                if self.Economy_class.get() != 0 :
-                    for x in range(1, self.Economy_class.get() + 1):
-                        m = 'EC' + str(x)
-                        self.data_seat.append(str(m),)
+                if eco_seat != 0 :
+                    for i in range(1, eco_seat + 1):
+                        if i % eco_seat == 1:
+                            seattype = 'LB'
+                        elif i % eco_seat == 2:
+                            seattype = 'MB'
+                        elif i % eco_seat == 3:
+                            seattype = 'UB'
+                        elif i % eco_seat == 4:
+                            seattype = 'LB'
+                        elif i % eco_seat == 5:
+                            seattype = 'MB'
+                        elif i % eco_seat == 6:
+                            seattype = 'UB'
+                        elif i % eco_seat == 7:
+                            seattype = 'LB'
+                        elif i % eco_seat == 0:
+                            seattype = 'UB'
 
-                    for i in range(1, self.Economy_class.get() + 1):
-                        if i % self.Economy_class.get() == 1:
-                            seattype = 'LB'
-                        elif i % self.Economy_class.get() == 2:
-                            seattype = 'MB'
-                        elif i % self.Economy_class.get() == 3:
-                            seattype = 'UB'
-                        elif i % self.Economy_class.get() == 4:
-                            seattype = 'LB'
-                        elif i % self.Economy_class.get() == 5:
-                            seattype = 'MB'
-                        elif i % self.Economy_class.get() == 6:
-                            seattype = 'UB'
-                        elif i % self.Economy_class.get() == 7:
-                            seattype = 'LB'
-                        elif i % self.Economy_class.get() == 0:
-                            seattype = 'UB'
-                        self.data_seattype.append((self.select_train_entry.get(),self.train_name_entry.get(), self.data_seat[i - 1], seattype, self.date_entry.get()))
+                        self.data_seattype.append((self.select_train_entry.get(),self.train_name_entry.get(), 'EC'+str(i), seattype,100, self.date_entry.get()))
 
-                if self.AC_first.get() != 0:
-                    for x in range(1, self.AC_first.get() + 1):
-                        x = 'A' + str(x)
-                        self.data_seat.append(str(x), )
 
-                    for i in range(1, self.AC_first.get() + 1):
-                        if i % self.AC_first.get() == 1:
+                if acfirst_seat != 0:
+
+                    for l in range(1, acfirst_seat + 1):
+                        if l % acfirst_seat == 1:
                             seattype = 'LB'
-                        elif i % self.AC_first.get() == 2:
+                        elif l % acfirst_seat == 2:
                             seattype = 'MB'
-                        elif i % self.AC_first.get() == 3:
+                        elif l % acfirst_seat == 3:
                             seattype = 'UB'
-                        elif i % self.AC_first.get() == 4:
+                        elif l % acfirst_seat == 4:
                             seattype = 'LB'
-                        elif i % self.AC_first.get() == 5:
+                        elif l % acfirst_seat == 5:
                             seattype = 'MB'
-                        elif i % self.AC_first.get() == 6:
+                        elif l % acfirst_seat == 6:
                             seattype = 'UB'
-                        elif i % self.AC_first.get() == 7:
+                        elif l % acfirst_seat == 7:
                             seattype = 'LB'
-                        elif i % self.AC_first.get() == 0:
+                        elif l % acfirst_seat == 0:
                             seattype = 'UB'
                         self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
-                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
-                if self.AC_two.get() != 0:
-                    for x in range(1, self.AC_two.get() + 1):
-                        x = 'AA' + str(x)
-                        self.data_seat.append(str(x), )
+                                                   'A'+str(l), seattype,200, self.date_entry.get()))
 
-                    for i in range(1, self.AC_two.get() + 1):
-                        if i % self.AC_two.get() == 1:
+                if acsecond_seat != 0:
+
+                    for m in range(1, acsecond_seat + 1):
+                        if m % acsecond_seat == 1:
                             seattype = 'LB'
-                        elif i % self.AC_two.get() == 2:
+                        elif m % acsecond_seat == 2:
                             seattype = 'MB'
-                        elif i % self.AC_two.get() == 3:
+                        elif m % acsecond_seat == 3:
                             seattype = 'UB'
-                        elif i % self.AC_two.get() == 4:
+                        elif m % acsecond_seat == 4:
                             seattype = 'LB'
-                        elif i % self.AC_two.get() == 5:
+                        elif m % acsecond_seat == 5:
                             seattype = 'MB'
-                        elif i % self.AC_two.get() == 6:
+                        elif m % acsecond_seat == 6:
                             seattype = 'UB'
-                        elif i % self.AC_two.get() == 7:
+                        elif m % acsecond_seat == 7:
                             seattype = 'LB'
-                        elif i % self.AC_two.get() == 0:
+                        elif m % acsecond_seat == 0:
                             seattype = 'UB'
                         self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
-                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
+                                                   'AA'+str(m), seattype,300, self.date_entry.get()))
 
-                if self.First_class.get() != 0:
-                    for x in range(1, self.First_class.get()+ 1):
-                        x = 'F' + str(x)
-                        self.data_seat.append(str(x), )
+                if first_class_seat != 0:
 
-                    for i in range(1, self.First_class.get() + 1):
-                        if i % self.First_class.get() == 1:
+                    for v in range(1, first_class_seat + 1):
+                        if v % first_class_seat == 1:
                             seattype = 'LB'
-                        elif i % self.First_class.get() == 2:
+                        elif v % first_class_seat == 2:
                             seattype = 'MB'
-                        elif i % self.First_class.get() == 3:
+                        elif v % first_class_seat == 3:
                             seattype = 'UB'
-                        elif i % self.First_class.get()== 4:
+                        elif v % first_class_seat == 4:
                             seattype = 'LB'
-                        elif i % self.First_class.get()== 5:
+                        elif v % first_class_seat == 5:
                             seattype = 'MB'
-                        elif i % self.First_class.get() == 6:
+                        elif v % first_class_seat == 6:
                             seattype = 'UB'
-                        elif i % self.First_class.get() == 7:
+                        elif v % first_class_seat == 7:
                             seattype = 'LB'
-                        elif i % self.First_class.get() == 0:
+                        elif v % first_class_seat == 0:
                             seattype = 'UB'
                         self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
-                                                   self.data_seat[i - 1], seattype, self.date_entry.get()))
+                                                   'F'+str(v), seattype,400, self.date_entry.get()))
 
-                sql_insert_b1 = "INSERT INTO Bookings (Train_type, Train_name , Seat,Seat_type,Date_travel) VALUES (%s,%s,%s,%s,%s)"
+
+                sql_insert_b1 = "INSERT INTO Bookings (Train_type, Train_name , Seat,Seat_type,Price,Date_travel) VALUES (%s,%s,%s,%s,%s,%s)"
                 my_cursor.executemany(sql_insert_b1, self.data_seattype)
                 mydb.commit()
+                self.data_seattype.clear()
+
 
 
 
@@ -288,6 +284,100 @@ class Mainpage:
                 query_input_2 = (self.train_name_entry.get(),self.from_entry.get(),self.via_entry.get(), self.to_entry.get(), self.date_entry.get(), self.time_entry.get(), self.time_2_entry.get())
                 my_cursor.execute(sql_query_avail_2,query_input_2)
                 mydb.commit()
+
+                if eco_seat != 0 :
+                    for i in range(1, eco_seat + 1):
+                        if i % eco_seat == 1:
+                            seattype = 'LB'
+                        elif i % eco_seat == 2:
+                            seattype = 'MB'
+                        elif i % eco_seat == 3:
+                            seattype = 'UB'
+                        elif i % eco_seat == 4:
+                            seattype = 'LB'
+                        elif i % eco_seat == 5:
+                            seattype = 'MB'
+                        elif i % eco_seat == 6:
+                            seattype = 'UB'
+                        elif i % eco_seat == 7:
+                            seattype = 'LB'
+                        elif i % eco_seat == 0:
+                            seattype = 'UB'
+
+                        self.data_seattype.append((self.select_train_entry.get(),self.train_name_entry.get(), 'EC'+str(i), seattype,100, self.date_entry.get()))
+
+
+                if acfirst_seat != 0:
+
+                    for l in range(1, acfirst_seat + 1):
+                        if l % acfirst_seat == 1:
+                            seattype = 'LB'
+                        elif l % acfirst_seat == 2:
+                            seattype = 'MB'
+                        elif l % acfirst_seat == 3:
+                            seattype = 'UB'
+                        elif l % acfirst_seat == 4:
+                            seattype = 'LB'
+                        elif l % acfirst_seat == 5:
+                            seattype = 'MB'
+                        elif l % acfirst_seat == 6:
+                            seattype = 'UB'
+                        elif l % acfirst_seat == 7:
+                            seattype = 'LB'
+                        elif l % acfirst_seat == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   'A'+str(l), seattype,200, self.date_entry.get()))
+
+                if acsecond_seat != 0:
+
+                    for m in range(1, acsecond_seat + 1):
+                        if m % acsecond_seat == 1:
+                            seattype = 'LB'
+                        elif m % acsecond_seat == 2:
+                            seattype = 'MB'
+                        elif m % acsecond_seat == 3:
+                            seattype = 'UB'
+                        elif m % acsecond_seat == 4:
+                            seattype = 'LB'
+                        elif m % acsecond_seat == 5:
+                            seattype = 'MB'
+                        elif m % acsecond_seat == 6:
+                            seattype = 'UB'
+                        elif m % acsecond_seat == 7:
+                            seattype = 'LB'
+                        elif m % acsecond_seat == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   'AA'+str(m), seattype,300, self.date_entry.get()))
+
+                if first_class_seat != 0:
+
+                    for v in range(1, first_class_seat + 1):
+                        if v % first_class_seat == 1:
+                            seattype = 'LB'
+                        elif v % first_class_seat == 2:
+                            seattype = 'MB'
+                        elif v % first_class_seat == 3:
+                            seattype = 'UB'
+                        elif v % first_class_seat == 4:
+                            seattype = 'LB'
+                        elif v % first_class_seat == 5:
+                            seattype = 'MB'
+                        elif v % first_class_seat == 6:
+                            seattype = 'UB'
+                        elif v % first_class_seat == 7:
+                            seattype = 'LB'
+                        elif v % first_class_seat == 0:
+                            seattype = 'UB'
+                        self.data_seattype.append((self.select_train_entry.get(), self.train_name_entry.get(),
+                                                   'F'+str(v), seattype,400, self.date_entry.get()))
+
+
+                sql_insert_b2 = "INSERT INTO Bookings (Train_type, Train_name , Seat,Seat_type,Price,Date_travel) VALUES (%s,%s,%s,%s,%s,%s)"
+                my_cursor.executemany(sql_insert_b2, self.data_seattype)
+                mydb.commit()
+                self.data_seattype.clear()
 
 
 

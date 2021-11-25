@@ -1,3 +1,5 @@
+#line 35 , 38, 379
+
 from tkinter import *
 import tkinter
 from tkinter import messagebox, font
@@ -25,7 +27,6 @@ root = tkinter.Tk()
 
 
 class Login :
-
 
     def __init__(self, root):
 
@@ -109,21 +110,25 @@ class Login :
         self.gender_entry.place(x=180, y=450, width=350, height=30)
 
 
-        password_label = Label(self.sign_in, text='Password  ', font=('seoge UI', 12), bg="white",fg='black').place(x=65, y=500)
+        password_label = Label(self.sign_in, text='Password  ', font=('seoge UI', 12), bg="white",fg='black')\
+            .place(x=65, y=500)
         self.password_entry = Entry(self.sign_in, width=50, bd=0, bg='white', fg='black', borderwidth=3)
         self.password_entry.place(x=180, y=500, width=350, height=30)
 
-        confirm_password = Label(self.sign_in, text='Confirm Password', font=('seoge UI', 12), bg="white",fg='black').place(x=40, y=550)
+        confirm_password = Label(self.sign_in, text='Confirm Password', font=('seoge UI', 12), bg="white",fg='black')\
+            .place(x=40, y=550)
         self.confirm_password_entry = Entry(self.sign_in, width=50, bd=0, bg='white', fg='black', borderwidth=3)
         self.confirm_password_entry.place(x=180, y=550, width=350, height=30)
 
         _lab = Label (self.sign_in, text = '*', fg = 'red3', bg = 'white', font =('seoge UI', 14) ).place(x = 29, y = 670)
-        warning_label = Label(self.sign_in, text = 'please enter all details correctly.', fg = 'black', bg = 'white', font =('seoge UI', 12) ).place(x = 40 , y = 670)
+        warning_label = Label(self.sign_in, text = 'please enter all details correctly.', fg = 'black', bg = 'white',
+                              font =('seoge UI', 12) ).place(x = 40 , y = 670)
 
         done_button = Button(self.sign_in, text='DONE', font=23, bg='red3', fg='white',command = self.sign_in_function)
         done_button.place(x=272, y=600)
 
-        close_signin = Button(self.sign_in, text='x',font =('seoge UI', 14),  command=self.destroy_signin, bg='red3', fg='white',highlightthickness=0, cursor='hand2')
+        close_signin = Button(self.sign_in, text='x',font =('seoge UI', 14),  command=self.destroy_signin, bg='red3',
+                              fg='white',highlightthickness=0, cursor='hand2')
         close_signin.place(x=560, y=15)
 
 
@@ -157,9 +162,9 @@ class Login :
             messagebox.showerror('username too small', 'usmername must be at least 8 characters long')
 
         else:
-            sqlsignin = 'INSERT INTO userinfo (Username, Firstname ,Surname,Phoneno,Email,UserPassword,Address) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+            sqlsignin = 'INSERT INTO userinfo (Username, Firstname ,Surname,Phoneno,Email,UserPassword,Address,Gender) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
             x1 = (self.username_entry.get(), self.firstname_entry.get(), self.lastname_entry.get(),
-                  self.phone_no_entry.get(), self.email_id_entry.get(), self.password_entry.get(), self.address_entry.get())
+                  self.phone_no_entry.get(), self.email_id_entry.get(), self.password_entry.get(), self.address_entry.get(),self.gender_entry.get())
             my_cursor.execute(sqlsignin, x1)
             mydb.commit()
 
@@ -380,10 +385,10 @@ class Mainpage:
         profile_back.place (x = 20 , y = 10)
 
         profile_frame_2 = Frame(self.profile_page, bg = 'linen',highlightbackground="red3", highlightthickness=1 )
-        profile_frame_2.place (x= 370, y= 255, height = 480, width = 1200)
+        profile_frame_2.place (x= 370, y= 255, height = 440, width = 1200)
 
         profile_frame_3 = Frame(profile_frame_2,bg = 'linen', highlightbackground = 'red3', highlightthickness = 1 )
-        profile_frame_3.place(x= 0, y = 0 ,height = 479, width = 300)
+        profile_frame_3.place(x= 0, y = 0 ,height = 439, width = 300)
 
         self.username= objLogin.username_check.get()
 
@@ -439,7 +444,10 @@ class Mainpage:
         notice_label = Label (profile_frame_3, text = '*The above details will be displayed on your ticket', bg = 'linen', fg = 'black', font = ('seoge UI', 13)).place(x = 317 , y = 370 )
 
         Change_details_button = Button(self.profile_page, bg = 'red3', fg = 'white', text = 'Change Details', font = ('Impact' , 22) , command = self.change_profile)
-        Change_details_button.place(x = 867, y = 830)
+        Change_details_button.place(x = 867, y = 780)
+
+        check_bookings_button = Button(self.profile_page, bg = 'red3', fg = 'white', text = 'Check Bookings', font = ('Impact' , 22), command = self.check_bookings)
+        check_bookings_button.place(x= 860, y= 860)
 
 
     def destroy_profile(self):
@@ -447,6 +455,19 @@ class Mainpage:
         self.page1.deiconify()
         self.profile_page.destroy()
 
+    def check_bookings(self):
+
+        self.bookchk = Toplevel(bg = 'linen')
+        self.bookchk.geometry('1270x420+320+150')
+        Lab1 = Label(self.bookchk, text='Your bookings', bg='linen', fg='black', font=('seoge UI', 14)).place(x=30, y=49)
+        book_lst_usr  = []
+
+        my_cursor.execute(f"SELECT Train_name FROM Bookings WHERE Username_1= '{self.username}' OR Username_2 = '{self.username}'")
+        for i in my_cursor:
+            if i[0] not in book_lst_usr:
+                book_lst_usr.append(i[0])
+
+        Lab2 = Label(self.bookchk, text=book_lst_usr, bg='linen', fg='black', font=('seoge UI', 14)).place(x=30,y=99)
 
     def change_profile(self):
 
@@ -678,38 +699,310 @@ class Ticketscreen:
 
     def book_pg(self,name):
 
-        booktic = Toplevel(bg = 'white')
-        booktic_frame1 = Frame(booktic,bg = 'red3')
-        booktic_frame1.place (x = 0 , y = 0 , height = 75 , width = 2000)
-        train_nme_lab= Label (booktic, text = self.train_lst[name] , bg = 'white', fg = 'black', font = ('Impact', 32)).place (x = 740 , y = 130)
+        self.seat_list = []
 
-        sql_query_lab_time = 'SELECT Time_travel FROM Available_trains WHERE Train_name = %s'
-        sql_run_t = (str(self.train_lst[name]),)
-        my_cursor.execute(sql_query_lab_time, sql_run_t)
-        tme = 0
-        for tme in my_cursor:
+        self.booktic = Toplevel(bg = 'white')
+        self.booktic.attributes('-fullscreen', True)
+        booktic_frame1 = Frame(self.booktic,bg = 'red3')
+        booktic_frame1.place (x = 0 , y = 0 , height = 75 , width = 2000)
+        lab_1 = Label(booktic_frame1, text = 'Book Ticket', bg = 'red3', fg = 'white',font = ('Impact', 32)).place (x =850 , y = 5 )
+        profile_back = Button(booktic_frame1, text='←', bg='red3', fg='white', command=self.back_booktic_page,
+                              font=('Impact', 22), bd=0, cursor='hand2')
+        profile_back.place(x=20, y=10)
+
+
+
+        train_nme_lab= Label (self.booktic, text = self.train_lst[name] , bg = 'white', fg = 'black', font = ('Impact', 32)).place (x = 37, y = 130)
+
+        sql_type_query = 'SELECT Train_type FROM Bookings WHERE Train_name = %s'
+        sql_2 = (str(self.train_lst[name]),)
+        my_cursor.execute(sql_type_query,sql_2)
+
+        for type in my_cursor:
             pass
 
-        lab_date = Label(booktic, text='Date of departure: '+ self.date_entry, bg='white', fg='black', font=('Impact', 20)).place(x=30,y=210)
-        train_tme_lab = Label(booktic, text='Time of departure : '+ str(tme[0]), bg='white', fg='black', font=('Impact', 20)).place(x=30, y=270)
+        if type[0] == 'D':
+            sql_query_lab_time = 'SELECT Time_travel FROM Available_trains WHERE Train_name = %s'
+            sql_run_t = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_query_lab_time, sql_run_t)
+            tme = 0
+            for tme in my_cursor:
+                pass
+
+            train_tme_lab = Label(self.booktic, text='Time of departure : ' + str(tme[0]), bg='white', fg='black',
+                                  font=('Impact', 20)).place(x=37, y=310)
+
+        elif type[0] == 'I':
+            sql_query_lab_time = 'SELECT Time_travel FROM Available_trains WHERE Train_name = %s'
+            sql_run_t = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_query_lab_time, sql_run_t)
+            tme = 0
+            for tme in my_cursor:
+                pass
+
+            sql_query_lab_time_2 = 'SELECT Time_2 FROM Available_trains WHERE Train_name = %s'
+            sql_run_t2 = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_query_lab_time_2, sql_run_t2)
+            tme2 = 0
+
+            for tme2 in my_cursor:
+                pass
+
+            train_tme_lab = Label(self.booktic, text='Time of departure : ' + str(tme[0]) +' and ' +str (tme2[0]), bg='white', fg='black',
+                                  font=('Impact', 20)).place(x=37, y=310)
 
 
+        lab_date = Label(self.booktic, text='Date of departure: '+ self.date_entry, bg='white', fg='black', font=('Impact', 20)).place(x=37,y=240)
+        lab_from = Label(self.booktic, text ='From: ' + self.from_entry, bg='white', fg='black', font=('Impact', 20)).place(x= 777, y = 240)
+        lab_to = Label(self.booktic,text ="To: "+  self.to_entry, bg='white', fg='black', font=('Impact', 20)).place(x= 777, y = 310)
 
 
+        availabel = Label(self.booktic,text ='Available seats ', bg='white', fg='black', font=('Impact', 20)).place(x= 40, y = 400)
+
+        From_qry = 'SELECT From_city FROM Available_trains WHERE Train_name = %s AND Date_travel = %s'
+        Via_qry = 'SELECT Via_city FROM Available_trains WHERE Train_name = %s AND Date_travel =%s'
+        To_qry = 'SELECT To_city FROM Available_trains WHERE Train_name = %s AND Date_travel = %s'
+
+        sql_qry = (self.train_lst[name], self.date_entry)
+        my_cursor.execute(From_qry, sql_qry)
+        self.from_result = my_cursor.fetchall()
+
+        my_cursor.execute(Via_qry,sql_qry)
+        self.via_result = my_cursor.fetchall()
+
+        my_cursor.execute(To_qry,sql_qry)
+        self.to_result= my_cursor.fetchall()
+
+        if self.from_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry and type[0]== 'I':
+
+            sql_seat_query_1 = 'SELECT Seat FROM Bookings WHERE Train_name = %s AND Username_1 is null AND Username_2 is null'
+            sql_1 = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_seat_query_1, sql_1)
+
+            for seat in my_cursor:
+                self.seat_list.append(seat[0])
+
+            for seat_no in range (len(self.seat_list)):
+                seat_button = Button(self.booktic, text=self.seat_list[seat_no], bg='purple3', fg='white', font=('seoge UI', 13), command = lambda seat_no = seat_no : self.select_seats(seat_no))
+                seat_button.place(x= 40+50*seat_no, y = 470)
+
+        elif self.via_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry:
+
+            sql_seat_query_2 = 'SELECT Seat FROM Bookings WHERE Train_name = %s AND Username_2 is null'
+            sql_1 = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_seat_query_2, sql_1)
+
+            for seat in my_cursor:
+                self.seat_list.append(seat[0])
+
+            for seat_no in range(len(self.seat_list)):
+                seat_button = Button(self.booktic, text=self.seat_list[seat_no], bg='purple3', fg='white',
+                                     font=('seoge UI', 13), command=lambda seat_no=seat_no: self.select_seats(seat_no))
+                seat_button.place(x=40 + 50 * seat_no, y=470)
+
+        elif self.from_result[0][0] == self.from_entry and self.via_result[0][0] == self.to_entry:
+
+            sql_seat_query_3 = 'SELECT Seat FROM Bookings WHERE Train_name = %s AND Username_1 is null'
+            sql_1 = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_seat_query_3, sql_1)
+
+            for seat in my_cursor:
+                self.seat_list.append(seat[0])
+
+            for seat_no in range(len(self.seat_list)):
+                seat_button = Button(self.booktic, text=self.seat_list[seat_no], bg='purple3', fg='white',
+                                     font=('seoge UI', 13), command=lambda seat_no=seat_no: self.select_seats(seat_no))
+                seat_button.place(x=40 + 50 * seat_no, y=470)
+
+        elif self.from_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry and type[0] == 'D':
+
+            sql_seat_query_4 = 'SELECT Seat FROM Bookings WHERE Train_name = %s AND Username_1 is null'
+            sql_4 = (str(self.train_lst[name]),)
+            my_cursor.execute(sql_seat_query_4, sql_4)
+
+            for seat in my_cursor:
+                self.seat_list.append(seat[0])
+
+            for seat_no in range(len(self.seat_list)):
+                seat_button = Button(self.booktic, text=self.seat_list[seat_no], bg='purple3', fg='white',
+                                     font=('seoge UI', 13), command=lambda seat_no=seat_no: self.select_seats(seat_no))
+                seat_button.place(x=40 + 50 * seat_no, y=470)
+
+        label = Label(self.booktic, text='select seats ', bg='white', fg='black', font=('Impact', 16)).place(x=30,
+                                                                                                             y=700)
+        instruction_frame = Frame(self.booktic, bg='linen')
+        instruction_frame.place(x=1100, y=220, height=520, width=700)
+
+        lab_1= Label(instruction_frame, text = 'Ticket Booking Section', bg = 'linen', fg = 'red3', font = ('Impact', 20)).place (x = 230, y = 40)
+        lab_2 = Label(instruction_frame, text = '● Click on your desired seat ', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place(x= 40, y = 120)
+        lab_3= Label(instruction_frame, text = '● Unavailable / booked seats won\'t be shown on the screen  ', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place(x= 40, y = 180)
+        lab_4= Label(instruction_frame, text = '● After selecting a seat ,the proceed button will appear', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place (x= 40, y= 240)
+        lab_5 = Label(instruction_frame, text = '● Click on proceed to generate your ticket', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place (x= 40, y =300)
+        lab_6 = Label(instruction_frame, text = '● Seat classes : ', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place (x= 40, y =360)
+        lab_7 = Label(instruction_frame, text = 'EC - Economy Class             A - AC 1st Tier', bg = 'linen', fg = 'red3', font = ('seoge UI', 14)).place (x= 60, y =400)
+        lab_8 = Label(instruction_frame, text=  'AA - AC 2 Tier                 F - First Class', bg='linen', fg='red3',font=('seoge UI', 14)).place(x=60, y=440)
+
+        if len(self.seat_list) == 0:
+            lab = Label(self.booktic, text = 'NO SEATS AVAILABLE !!', bg = 'white', fg = 'black', font=('Impact', 24)).place(x= 30, y = 760)
+
+        self.selected_seats = Entry(self.booktic, bg='white', fg='Black', width=50, font=('seoge UI', 16))
+        self.selected_seats.place(x=190, y=700)
+
+        self.train = self.train_lst[name]
 
 
+    def select_seats(self,seatno):
 
+        self.selected_seats.insert(0,str(self.seat_list[seatno])+' ')
+        proceed_button = Button (self.booktic,text= 'Proceed', bg='red3', fg='white', font=('seoge UI', 24), command = self.ticket_functn)
+        proceed_button.place(x= 885, y = 800)
+
+    def ticket_functn (self):
+
+        self.tic_page = Toplevel(bg ='white')
+        self.tic_page.geometry('1170x600+400+250')
+        self.tic_page.resizable(False,False)
+        frame_tic_page = Frame(self.tic_page, bg = 'red3')
+        frame_tic_page.place(x= 0, y = 0, height= 70, width = 1171)
+        lab4= Label(frame_tic_page, text = 'Ticket', bg = 'red3', fg = 'white', font = ('Impact', 24)).place(x= 535, y = 15)
+        Lab = Label(self.tic_page, text='train : '+ self.train, bg='white', fg='black', font=('Seoge UI', 14)).place(x=30,y=260)
+
+        self.userid = objLogin.username_check.get()
+
+
+        sql_qry_1 = 'SELECT Firstname FROM Userinfo WHERE Username = %s'
+        sql_qry_1_com = (str(self.userid),)
+        my_cursor.execute(sql_qry_1,sql_qry_1_com)
+        for F1 in my_cursor:
+            pass
+        lab_1= Label(self.tic_page, text ='Firstname: '+ F1[0],  bg='white', fg='black', font=('Seoge UI', 14)).place(x= 30, y = 100)
+
+        sql_qry_2 = 'SELECT Surname FROM Userinfo WHERE Username = %s'
+        my_cursor.execute(sql_qry_2, sql_qry_1_com)
+        for F2 in my_cursor:
+            pass
+        lab_2 = Label(self.tic_page,text ='Lastname:'+ F2[0], bg = 'white', fg = 'black', font = ('Seoge UI', 14)).place(x= 600, y = 100)
+
+        sql_qry_3 = 'SELECT Email FROM Userinfo WHERE Username = %s'
+        my_cursor.execute(sql_qry_3, sql_qry_1_com)
+        for F3 in my_cursor:
+            pass
+        lab_3 = Label(self.tic_page, text='Email id: '+ F3[0], bg='white', fg='black', font=('Seoge UI', 14)).place(x=30, y=160)
+
+        sql_qry_4 = 'SELECT Address FROM Userinfo WHERE Username = %s'
+        my_cursor.execute(sql_qry_4, sql_qry_1_com)
+        for F4 in my_cursor:
+            pass
+        lab_4 = Label(self.tic_page, text='Address: ' + F4[0], bg='white', fg='black', font=('Seoge UI', 14)).place(x=30, y=210)
+
+        sql_qry_5 = 'SELECT Gender FROM Userinfo WHERE Username = %s'
+        my_cursor.execute(sql_qry_5, sql_qry_1_com)
+        for F5 in my_cursor:
+            pass
+        lab_5 = Label(self.tic_page, text='Gender: ' + F5[0], bg='white', fg='black', font=('Seoge UI', 16)).place(x=600, y=160)
+
+
+        final_seat_list = list(self.selected_seats.get().rstrip().split())
+
+        self.final_seat_tuple = tuple(final_seat_list)
+        f_list = []
+        p_list = []
+        Price = 0
+
+        if len(final_seat_list) == 1:
+            my_cursor.execute(f"SELECT Seat_type FROM Bookings WHERE Seat IN ('{final_seat_list[0]}') AND Train_name = '{self.train}';")
+            ret_1 = my_cursor.fetchall()
+            f_list.append(ret_1[0][0])
+
+            my_cursor.execute(f"SELECT Price FROM Bookings WHERE Seat IN ('{final_seat_list[0]}') AND Train_name = '{self.train}';")
+            ret_2 = my_cursor.fetchall()
+            p_list.append(ret_2[0][0])
+
+            Price = p_list[0]
+
+        else:
+            sql_qry_seattype = f"SELECT Seat_type FROM Bookings WHERE Seat IN {self.final_seat_tuple} AND Train_name = '{self.train}';"
+            my_cursor.execute(sql_qry_seattype)
+            for l in my_cursor:
+                f_list.append(l)
+
+            sql_qry_price = f"SELECT Price FROM Bookings WHERE Seat IN {self.final_seat_tuple} AND Train_name = '{self.train}';"
+            my_cursor.execute(sql_qry_price)
+
+            for n in my_cursor:
+                p_list.append(n)
+
+            for p in range(0,len(p_list)):
+                Price = Price + p_list[p][0]
+
+        for m in range(len(f_list)):
+            lab = Label(self.tic_page ,text= f_list[m], bg='white', fg='black', font=('seoge UI', 12)).place(x=168+ 55*m,y=350)
+        for x in range (len(final_seat_list)):
+            label = Label(self.tic_page ,text= str(final_seat_list[x]), bg='white', fg='black', font=('seoge UI', 12)).place(x=168 + 55*x,y=310)
+
+
+        lab = Label(self.tic_page, text = 'booked seats : ', bg = 'white', fg = 'black', font = ('seoge UI', 12)).place (x= 30 , y =310)
+        lab2= Label(self.tic_page, text = 'seat type :', bg= 'white', fg = 'black', font= ('seoge UI', 12)).place(x= 30, y = 350)
+        lab3= Label(self.tic_page,text ='Amount : ', bg = 'white', fg = 'black', font =('seoge UI', 14)).place(x= 30, y = 400)
+        lab4 = Label(self.tic_page, text = str(Price) +' Rs.', bg = 'white', fg = 'black', font = ('seoge UI',14)).place(x = 130, y = 400)
+
+        done_button = Button(self.tic_page, text = 'done' , bg = 'red3', fg = 'white', font = ('Impact' ,18), command =self.done_final)
+        done_button.place(x=540, y = 500)
+        self.ammount = Price
+
+    def done_final(self):
+        trip = 'full trip'
+
+        payment = messagebox.askyesno('payment',str(self.ammount) + ' will be deducted from your account' )
+        if payment == 1:
+
+            if len(self.final_seat_tuple) == 1:
+
+                if self.from_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_1 = '{self.userid}' , Username_2 = '{trip}' WHERE Train_name = '{self.train}' AND Seat IN ('{self.final_seat_tuple[0]}');")
+                    mydb.commit()
+
+                elif self.via_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_2 = '{self.userid}' WHERE Train_name = '{self.train}' AND Seat IN ('{self.final_seat_tuple[0]}') ;")
+                    mydb.commit()
+
+                elif self.from_result[0][0] == self.from_entry and self.via_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_1 = '{self.userid}' WHERE Train_name = '{self.train}' AND Seat IN ('{self.final_seat_tuple[0]}') ;")
+                    mydb.commit()
+
+                messagebox.showinfo('Booking done', 'Ticket booked successfully. pls restart to finish procedure')
+
+
+            else:
+                if self.from_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_1 = '{self.userid}' , Username_2 = '{trip}' WHERE Train_name = '{self.train}' AND Seat IN {self.final_seat_tuple};")
+                    mydb.commit()
+
+                elif self.via_result[0][0] == self.from_entry and self.to_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_2 = '{self.userid}' WHERE Train_name = '{self.train}' AND Seat IN {self.final_seat_tuple};")
+                    mydb.commit()
+
+                elif self.from_result[0][0] == self.from_entry and self.via_result[0][0] == self.to_entry:
+                    my_cursor.execute(f"UPDATE Bookings SET Username_1 = '{self.userid}' WHERE Train_name = '{self.train}' AND Seat IN {self.final_seat_tuple};")
+                    mydb.commit()
+                messagebox.showinfo('Booking done', 'Payment successful. pls restart to finish procedure')
+
+        else:
+            messagebox.showinfo('Payment unsuccessful','Seats not booked')
 
 
     def back_tic_page (self):
+
         self.chktrains.destroy()
         objLogin.objmainscreen.page1.deiconify()
 
 
+    def back_booktic_page(self):
+        self.booktic.destroy()
+        self.chktrains.deiconify()
 
 
 
 
 objLogin =  Login(root)
-
 root.mainloop()
